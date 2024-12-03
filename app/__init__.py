@@ -1,8 +1,12 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
+import flask_login.utils
+from app.compat import safe_str_cmp
 from flask_login import LoginManager
 from flask_migrate import Migrate
 from config import Config
+
+flask_login.utils.safe_str_cmp = safe_str_cmp
 
 db = SQLAlchemy()
 login_manager = LoginManager()
