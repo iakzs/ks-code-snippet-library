@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="jumbotron text-center mb-4">
+        <h1 class="display-4">K's CSL</h1>
+        <p class="lead">Code Snippet Library</p>
+        <p>A good and reliable library for your code snippets!</p>
+        <p>...and doesn't cost anything!</p>
+        {% if not current_user.is_authenticated %}
+            <p>
+                <a class="btn btn-primary btn-lg me-2" href="{{ url_for('auth.register') }}">Register</a>
+                <a class="btn btn-outline-primary btn-lg" href="{{ url_for('auth.login') }}">Log In</a>
+            </p>
+        {% endif %}
+    </div>
+
+    <h2 class="mb-4">Recent Snippets</h2>
+    
+    {% if snippets.items %}
+        <div class="row">
+            {% for snippet in snippets.items %}
+                <div class="col-md-6 mb-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                <a href="{{ url_for('snippets.view', slug=snippet.slug) }}" class="text-decoration-none">
+                                    {{ snippet.title }}
+                                </a>
+                            </h5>
+                            <h6 class="card-subtitle mb-2 text-muted">{{ snippet.language }}</h6>
+                            {% if snippet.description %}
+                                <p class="card-text">{{ snippet.description[:150] }}{% if snippet.description|length > 150 %}...{% endif %}</p>
+                            {% endif %}
+                            <div class="card-text">
+                                <small class="text-muted">
+                                    By {{ snippet.author.username }} | 
+                                    {{ snippet.created_at.strftime('%Y-%m-%d') }} |
+                                    {{ snippet.views }} views
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+        {% if snippets.pages > 1 %}
+            <nav aria-label="Snippet navigation">
+                <ul class="pagination justify-content-center">
+                    {% if snippets.has_prev %}
+                        <li class="page-item">
+                            <a class="page-link" href="{{ url_for('main.index', page=snippets.prev_num) }}">Previous</a>
+                        </li>
+                    {% endif %}
+                    
+                    {% for page_num in snippets.iter_pages(left_edge=2, left_current=2, right_current=3, right_edge=2) %}
+                        {% if page_num %}
+                            <li class="page-item {% if page_num == snippets.page %}active{% endif %}">
+                                <a class="page-link" href="{{ url_for('main.index', page=page_num) }}">{{ page_num }}</a>
+                            </li>
+                        {% else %}
+                            <li class="page-item disabled"><span class="page-link">...</span></li>
+                        {% endif %}
+                    {% endfor %}
+                    
+                    {% if snippets.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="{{ url_for('main.index', page=snippets.next_num) }}">Next</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </nav>
+        {% endif %}
+    {% else %}
+        <p class="text-center">No snippets found.</p>
+    {% endif %}
+{% endblock %}

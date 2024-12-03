@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <form action="{{ url_for('main.search') }}" method="get" class="row g-3">
+                        <div class="col-md-6">
+                            <input type="text" class="form-control" name="q" value="{{ query }}" placeholder="Search snippets...">
+                        </div>
+                        <div class="col-md-4">
+                            <select class="form-select" name="language">
+                                <option value="">All Languages</option>
+                                <option value="python" {% if language == 'python' %}selected{% endif %}>Python</option>
+                                <option value="javascript" {% if language == 'javascript' %}selected{% endif %}>JavaScript</option>
+                                <option value="html" {% if language == 'html' %}selected{% endif %}>HTML</option>
+                                <option value="css" {% if language == 'css' %}selected{% endif %}>CSS</option>
+                                <option value="java" {% if language == 'java' %}selected{% endif %}>Java</option>
+                                <option value="cpp" {% if language == 'cpp' %}selected{% endif %}>C++</option>
+                                <option value="csharp" {% if language == 'csharp' %}selected{% endif %}>C#</option>
+                                <option value="php" {% if language == 'php' %}selected{% endif %}>PHP</option>
+                                <option value="ruby" {% if language == 'ruby' %}selected{% endif %}>Ruby</option>
+                                <option value="go" {% if language == 'go' %}selected{% endif %}>Go</option>
+                                <option value="rust" {% if language == 'rust' %}selected{% endif %}>Rust</option>
+                                <option value="sql" {% if language == 'sql' %}selected{% endif %}>SQL</option>
+                                <option value="other" {% if language == 'other' %}selected{% endif %}>Other</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <button type="submit" class="btn btn-primary w-100">Search</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% if snippets.items %}
+        <div class="row">
+            {% for snippet in snippets.items %}
+                <div class="col-md-6 mb-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                <a href="{{ url_for('snippets.view', slug=snippet.slug) }}" class="text-decoration-none">
+                                    {{ snippet.title }}
+                                </a>
+                            </h5>
+                            <h6 class="card-subtitle mb-2 text-muted">{{ snippet.language }}</h6>
+                            {% if snippet.description %}
+                                <p class="card-text">{{ snippet.description[:150] }}{% if snippet.description|length > 150 %}...{% endif %}</p>
+                            {% endif %}
+                            <div class="card-text">
+                                <small class="text-muted">
+                                    By {{ snippet.author.username }} | 
+                                    {{ snippet.created_at.strftime('%Y-%m-%d') }} |
+                                    {{ snippet.views }} views
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+        {% if snippets.pages > 1 %}
+            <nav aria-label="Search results navigation">
+                <ul class="pagination justify-content-center">
+                    {% if snippets.has_prev %}
+                        <li class="page-item">
+                            <a class="page-link" href="{{ url_for('main.search', q=query, language=language, page=snippets.prev_num) }}">Previous</a>
+                        </li>
+                    {% endif %}
+                    
+                    {% for page_num in snippets.iter_pages(left_edge=2, left_current=2, right_current=3, right_edge=2) %}
+                        {% if page_num %}
+                            <li class="page-item {% if page_num == snippets.page %}active{% endif %}">
+                                <a class="page-link" href="{{ url_for('main.search', q=query, language=language, page=page_num) }}">{{ page_num }}</a>
+                            </li>
+                        {% else %}
+                            <li class="page-item disabled"><span class="page-link">...</span></li>
+                        {% endif %}
+                    {% endfor %}
+                    
+                    {% if snippets.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="{{ url_for('main.search', q=query, language=language, page=snippets.next_num) }}">Next</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </nav>
+        {% endif %}
+    {% else %}
+        <p class="text-center">No snippets found matching your search criteria.</p>
+    {% endif %}
+{% endblock %}
