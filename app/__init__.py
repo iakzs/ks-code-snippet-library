@@ -1,12 +1,15 @@
+from datetime import datetime
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 from flask_migrate import Migrate
+from werkzeug.security import generate_password_hash, check_password_hash
 from config import Config
 
 db = SQLAlchemy()
 login_manager = LoginManager()
 login_manager.login_view = 'auth.login'
+login_manager.login_message = 'Please log in to access this page.'
 migrate = Migrate()
 
 def create_app(config_class=Config):
