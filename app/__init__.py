@@ -1,9 +1,13 @@
 from datetime import datetime
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
+from werkzeug import security
+from app.utils.security import safe_str_cmp
+
+security.safe_str_cmp = safe_str_cmp
+
 from flask_login import LoginManager
 from flask_migrate import Migrate
-from werkzeug.security import generate_password_hash, check_password_hash
 from config import Config
 
 db = SQLAlchemy()
