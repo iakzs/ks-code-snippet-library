@@ -12,4 +12,5 @@ Flask-Migrate==3.1.0
 SQLAlchemy==1.4.46
 bcrypt==4.0.1
 markdown2==2.4.10
-gunicorn==21.2.0
+gunicorn==23.0.0
+alembic~=1.15.2

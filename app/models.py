@@ -13,7 +13,7 @@ class User(UserMixin, db.Model):
     username = db.Column(db.String(64), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     password_hash = db.Column(db.String(128))
-    is_admin = db.Column(db.Boolean, default=False)  # New admin flag
+    is_admin = db.Column(db.Boolean, default=False)
     snippets = db.relationship('Snippet', backref='author', lazy='dynamic')
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 

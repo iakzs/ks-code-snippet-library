@@ -1,0 +1,12 @@
+﻿{% extends "base.html" %}
+
+{% block content %}
+    <div class="text-center mt-5">
+        <h1 class="display-4 text-danger">404</h1>
+        <p class="lead">Oops! The page you're looking for doesn't exist.</p>
+        <p>It seems like you've stumbled upon a dead link or mistyped the URL. 😔</p>
+        <a href="{{ url_for('main.index') }}" class="btn btn-primary btn-lg mt-3">
+            Back to Home
+        </a>
+    </div>
+{% endblock %}

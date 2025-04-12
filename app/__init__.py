@@ -1,5 +1,4 @@
-from datetime import datetime
-from flask import Flask
+from flask import Flask, render_template
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug import security
 from app.utils.security import safe_str_cmp
@@ -32,6 +31,10 @@ def create_app(config_class=Config):
 
     from app.snippets import bp as snippets_bp
     app.register_blueprint(snippets_bp, url_prefix='/snippets')
+
+    @app.errorhandler(404)
+    def page_not_found(e):
+        return render_template('error/404.html'), 404
 
     return app
 

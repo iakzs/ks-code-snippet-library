@@ -1,0 +1,36 @@
+﻿{% extends "base.html" %}
+
+{% block content %}
+    <div class="profile-header text-center mb-4">
+        <h1>{{ user.username }}</h1>
+        <p class="text-muted">Public Snippets</p>
+    </div>
+
+    <div class="snippet-list">
+        {% if snippets %}
+            <div class="row">
+                {% for snippet in snippets %}
+                    <div class="col-md-6 mb-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">
+                                    <a href="{{ url_for('snippets.view', slug=snippet.slug) }}">{{ snippet.title }}</a>
+                                </h5>
+                                <p class="card-text">
+                                    {{ snippet.description[:150] }}{% if snippet.description and snippet.description|length > 150 %}...{% endif %}
+                                </p>
+                                <div class="card-text text-muted">
+                                    Language: {{ snippet.language }} |
+                                    Created: {{ snippet.created_at.strftime('%Y-%m-%d') }} |
+                                    Views: {{ snippet.views }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p class="text-center">This user has not shared any public snippets yet.</p>
+        {% endif %}
+    </div>
+{% endblock %}

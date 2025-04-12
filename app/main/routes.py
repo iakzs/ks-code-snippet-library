@@ -1,8 +1,9 @@
 from flask import render_template, request
 from app.main import bp
-from app.models import Snippet
+from app.models import Snippet, User
 
 @bp.route('/')
+
 @bp.route('/index')
 def index():
     page = request.args.get('page', 1, type=int)
@@ -37,3 +38,9 @@ def search():
                          snippets=snippets,
                          query=query,
                          language=language)
+
+@bp.route('/user/<username>')
+def public_profile(username):
+    user = User.query.filter_by(username=username).first_or_404()
+    snippets = Snippet.query.filter_by(user_id=user.id, public=True).order_by(Snippet.created_at.desc()).all()
+    return render_template('user/profile.html', user=user, snippets=snippets)

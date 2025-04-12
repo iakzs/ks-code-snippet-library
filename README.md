@@ -10,7 +10,6 @@ A modern, user-friendly code snippet library platform where developers can disco
 - 📱 Responsive design
 - 📊 User analytics
 - 🔄 Version control for snippets
-
 ## Getting Started
 
 ### Prerequisites
