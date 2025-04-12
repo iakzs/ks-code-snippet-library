@@ -8,8 +8,7 @@ A modern, user-friendly code snippet library platform where developers can disco
 - 💻 Rich code display with syntax highlighting
 - 🔐 User authentication and management
 - 📱 Responsive design
-- 📊 User analytics
-- 🔄 Version control for snippets
+
 ## Getting Started
 
 ### Prerequisites
